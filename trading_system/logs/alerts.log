@@ -1,0 +1,11 @@
+[2025-09-02 11:47:11] INFO: 🚀 Auto-updater system starting
+[2025-09-02 11:47:11] INFO: ⏰ Scheduled tasks configured:
+[2025-09-02 11:47:11] INFO:    📅 06:00 - Daily data collection
+[2025-09-02 11:47:11] INFO:    🔄 Every hour - Data updates
+[2025-09-02 11:47:11] INFO:    📊 08:00, 14:00, 20:00 - Dashboard analysis
+[2025-09-10 11:38:02] INFO: 🚀 Auto-updater system starting
+[2025-09-10 11:38:02] INFO: ⏰ Scheduled tasks configured:
+[2025-09-10 11:38:02] INFO:    📅 06:00 - Daily data collection
+[2025-09-10 11:38:02] INFO:    🔄 Every hour - Data updates
+[2025-09-10 11:38:02] INFO:    📊 08:00, 14:00, 20:00 - Dashboard analysis
+[2025-09-10 11:48:18] INFO: ⏹️ Auto-updater stopped by user

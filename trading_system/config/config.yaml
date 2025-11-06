@@ -1,0 +1,19 @@
+# Configuration file for your trading system
+
+# Exchange Settings
+exchange:
+  name: "gateio"
+  api_key: "65c217404b22534986ff458263a8ad22"
+  api_secret: "5870517e821a855677afc7171c67d08308169e44265361f303ab575c18156058"
+  
+# System Settings
+system:
+  test_mode: true
+  max_api_calls_per_second: 2
+  
+# Initial Watchlist
+watchlist:
+  - "BTC/USDT"
+  - "ETH/USDT"
+  - "SOL/USDT"
+  - "ENA/USDT"

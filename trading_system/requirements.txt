@@ -1,0 +1,26 @@
+# Trading System Dependencies
+
+# Exchange connectivity
+ccxt>=4.0.0
+
+# Data processing
+pandas>=2.0.0
+numpy>=1.24.0
+
+# Technical indicators
+ta-lib>=0.4.0  # May require manual installation on some systems
+pandas-ta>=0.3.14b0  # Alternative to ta-lib
+
+# Configuration
+pyyaml>=6.0
+
+# Web framework (for Phase 1B)
+flask>=3.0.0
+flask-cors>=4.0.0
+
+# Telegram bot (for Phase 1C)
+python-telegram-bot>=20.0
+
+# Utilities
+python-dateutil>=2.8.0
+requests>=2.31.0

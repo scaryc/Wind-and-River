@@ -25,9 +25,9 @@ def create_database():
 
 def create_tables(conn):
     """Create all the tables we need"""
-    
+
     cursor = conn.cursor()
-    
+
     # Table 1: Price data (OHLCV - Open, High, Low, Close, Volume)
     cursor.execute('''
         CREATE TABLE IF NOT EXISTS price_data (
@@ -45,8 +45,15 @@ def create_tables(conn):
         )
     ''')
     print("✅ Created price_data table")
-    
-    # Table 2: Watchlist (coins we're monitoring)
+
+    # Add index for performance
+    cursor.execute('''
+        CREATE INDEX IF NOT EXISTS idx_symbol_timeframe_timestamp
+        ON price_data(symbol, timeframe, timestamp)
+    ''')
+    print("✅ Created price_data index")
+
+    # Table 2: Legacy Watchlist (kept for backward compatibility)
     cursor.execute('''
         CREATE TABLE IF NOT EXISTS watchlist (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -57,22 +64,54 @@ def create_tables(conn):
         )
     ''')
     print("✅ Created watchlist table")
-    
-    # Table 3: Signals (future - for Wind Catcher/River Turn alerts)
+
+    # Table 2B: User Watchlists (new multi-timeframe watchlists)
+    cursor.execute('''
+        CREATE TABLE IF NOT EXISTS user_watchlists (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            symbol TEXT NOT NULL,
+            timeframe TEXT NOT NULL,
+            direction TEXT NOT NULL,
+            added_at INTEGER NOT NULL,
+            notes TEXT,
+            UNIQUE(symbol, timeframe, direction)
+        )
+    ''')
+    print("✅ Created user_watchlists table")
+
+    # Table 3: Enhanced Signals (Wind Catcher/River Turn alerts)
     cursor.execute('''
         CREATE TABLE IF NOT EXISTS signals (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             timestamp INTEGER NOT NULL,
             symbol TEXT NOT NULL,
+            timeframe TEXT NOT NULL,
             system TEXT NOT NULL,
             signal_type TEXT NOT NULL,
+            confluence_score REAL NOT NULL,
+            confluence_class TEXT NOT NULL,
             price REAL NOT NULL,
-            notes TEXT,
+            indicators_firing TEXT,
+            volume_level TEXT,
+            volume_ratio REAL,
+            details TEXT,
+            notified BOOLEAN DEFAULT 0,
             created_at INTEGER NOT NULL
         )
     ''')
     print("✅ Created signals table")
-    
+
+    # Add indexes for signals table
+    cursor.execute('''
+        CREATE INDEX IF NOT EXISTS idx_signals_timestamp
+        ON signals(timestamp DESC)
+    ''')
+    cursor.execute('''
+        CREATE INDEX IF NOT EXISTS idx_signals_symbol_timeframe
+        ON signals(symbol, timeframe)
+    ''')
+    print("✅ Created signals indexes")
+
     # Save changes
     conn.commit()
     print("✅ All tables created successfully!")
@@ -99,31 +138,56 @@ def add_initial_watchlist(conn):
 def show_database_info(conn):
     """Show some basic info about the database"""
     cursor = conn.cursor()
-    
+
     print("\n" + "="*50)
     print("📊 DATABASE INFORMATION")
     print("="*50)
-    
+
     # Show tables
     cursor.execute("SELECT name FROM sqlite_master WHERE type='table';")
     tables = cursor.fetchall()
     print(f"\nTables created: {len(tables)}")
     for table in tables:
         print(f"  - {table[0]}")
-    
-    # Show watchlist
+
+    # Show legacy watchlist
     cursor.execute("SELECT symbol, active FROM watchlist ORDER BY symbol")
     watchlist = cursor.fetchall()
-    print(f"\nWatchlist ({len(watchlist)} coins):")
+    print(f"\nLegacy Watchlist ({len(watchlist)} coins):")
     for symbol, active in watchlist:
         status = "✅" if active else "❌"
         print(f"  {status} {symbol}")
-    
+
+    # Show user watchlists
+    cursor.execute("SELECT COUNT(*) FROM user_watchlists")
+    user_watchlist_count = cursor.fetchone()[0]
+    print(f"\nUser Watchlists: {user_watchlist_count} entries")
+
+    if user_watchlist_count > 0:
+        cursor.execute("""
+            SELECT symbol, timeframe, direction
+            FROM user_watchlists
+            ORDER BY direction, timeframe, symbol
+        """)
+        user_watchlists = cursor.fetchall()
+        current_direction = None
+        for symbol, timeframe, direction in user_watchlists:
+            if direction != current_direction:
+                current_direction = direction
+                emoji = "🌪️" if direction == "wind_catcher" else "🌊"
+                print(f"\n  {emoji} {direction.replace('_', ' ').title()}:")
+            print(f"    [{timeframe}] {symbol}")
+
     # Show price data count
     cursor.execute("SELECT COUNT(*) FROM price_data")
     price_count = cursor.fetchone()[0]
     print(f"\nPrice records stored: {price_count}")
-    
+
+    # Show signals count
+    cursor.execute("SELECT COUNT(*) FROM signals")
+    signals_count = cursor.fetchone()[0]
+    print(f"Signals recorded: {signals_count}")
+
     print("="*50)
 
 def main():

@@ -38,7 +38,7 @@ def get_price_data(conn, symbol, timeframe='1h', limit=200):
     return df
 
 # Import analyzer functions
-def get_hull_signals(conn, symbol):
+def get_hull_signals(conn, symbol, timeframe='1h'):
     """Get Hull MA signals from enhanced_hull_analyzer"""
     try:
         # Import the analyze function from enhanced_hull_analyzer
@@ -46,22 +46,22 @@ def get_hull_signals(conn, symbol):
         spec = importlib.util.spec_from_file_location("enhanced_hull_analyzer", "enhanced_hull_analyzer.py")
         hull_module = importlib.util.module_from_spec(spec)
         spec.loader.exec_module(hull_module)
-        
-        result = hull_module.analyze_symbol_hull(conn, symbol)
+
+        result = hull_module.analyze_symbol_hull(conn, symbol, timeframe=timeframe)
         return result['all_signals'] if result else []
     except Exception as e:
         print(f"Error importing Hull analyzer: {e}")
         return []
 
-def get_ao_signals(conn, symbol):
+def get_ao_signals(conn, symbol, timeframe='1h'):
     """Get AO divergence signals from enhanced_indicators"""
     try:
         import importlib.util
         spec = importlib.util.spec_from_file_location("enhanced_indicators", "enhanced_indicators.py")
         ao_module = importlib.util.module_from_spec(spec)
         spec.loader.exec_module(ao_module)
-        
-        result = ao_module.analyze_symbol_with_ao(conn, symbol)
+
+        result = ao_module.analyze_symbol_with_ao(conn, symbol, timeframe=timeframe)
         if result and result['ao_analysis']['divergences']:
             signals = []
             for div in result['ao_analysis']['divergences']:
@@ -77,15 +77,15 @@ def get_ao_signals(conn, symbol):
         print(f"Error importing AO analyzer: {e}")
         return []
 
-def get_alligator_signals(conn, symbol):
+def get_alligator_signals(conn, symbol, timeframe='1h'):
     """Get Alligator signals from alligator_analyzer"""
     try:
         import importlib.util
         spec = importlib.util.spec_from_file_location("alligator_analyzer", "alligator_analyzer.py")
         alligator_module = importlib.util.module_from_spec(spec)
         spec.loader.exec_module(alligator_module)
-        
-        result = alligator_module.analyze_symbol_alligator(conn, symbol)
+
+        result = alligator_module.analyze_symbol_alligator(conn, symbol, timeframe=timeframe)
         if result and result['retracement_events']:
             signals = []
             for event in result['retracement_events']:
@@ -103,15 +103,15 @@ def get_alligator_signals(conn, symbol):
         print(f"Error importing Alligator analyzer: {e}")
         return []
 
-def get_ichimoku_signals(conn, symbol):
+def get_ichimoku_signals(conn, symbol, timeframe='1h'):
     """Get Ichimoku signals from ichimoku_analyzer"""
     try:
         import importlib.util
         spec = importlib.util.spec_from_file_location("ichimoku_analyzer", "ichimoku_analyzer.py")
         ichimoku_module = importlib.util.module_from_spec(spec)
         spec.loader.exec_module(ichimoku_module)
-        
-        result = ichimoku_module.analyze_symbol_ichimoku(conn, symbol)
+
+        result = ichimoku_module.analyze_symbol_ichimoku(conn, symbol, timeframe=timeframe)
         if result and result['significant_events']:
             signals = []
             for event in result['significant_events']:
@@ -121,7 +121,7 @@ def get_ichimoku_signals(conn, symbol):
                     system = 'wind_catcher' if 'green' in event.get('cloud_color', '') else 'river_turn'
                 else:
                     system = 'wind_catcher'
-                
+
                 signals.append({
                     'type': event['type'],
                     'system': system,
@@ -134,7 +134,7 @@ def get_ichimoku_signals(conn, symbol):
         print(f"Error importing Ichimoku analyzer: {e}")
         return []
 
-def detect_volume_signals(df, monitoring_candles=3):
+def detect_volume_signals(df, timeframe='1h', monitoring_candles=3):
     """Detect volume signals"""
     if len(df) < 24:
         return []
@@ -252,29 +252,39 @@ def calculate_master_confluence(hull_signals, ao_signals, alligator_signals, ich
         'signal_count': signal_count
     }
 
-def analyze_master_confluence(conn, symbol):
-    """Master confluence analysis combining all indicators"""
-    df = get_price_data(conn, symbol, timeframe='1h', limit=200)
+def analyze_master_confluence(conn, symbol, timeframe='1h'):
+    """Master confluence analysis combining all indicators
+
+    Parameters:
+    - conn: Database connection
+    - symbol: Trading pair (e.g., 'BTC/USDT')
+    - timeframe: Timeframe to analyze ('8h', '1h', '15m', etc.)
+
+    Returns:
+    - dict: Complete analysis with confluence score and signals
+    """
+    df = get_price_data(conn, symbol, timeframe=timeframe, limit=200)
     if df is None or len(df) < 150:
         return None
-    
+
     # Get signals from all dedicated analyzers
-    hull_signals = get_hull_signals(conn, symbol)
-    ao_signals = get_ao_signals(conn, symbol)
-    alligator_signals = get_alligator_signals(conn, symbol)
-    ichimoku_signals = get_ichimoku_signals(conn, symbol)
-    volume_signals = detect_volume_signals(df.copy())
-    
+    hull_signals = get_hull_signals(conn, symbol, timeframe=timeframe)
+    ao_signals = get_ao_signals(conn, symbol, timeframe=timeframe)
+    alligator_signals = get_alligator_signals(conn, symbol, timeframe=timeframe)
+    ichimoku_signals = get_ichimoku_signals(conn, symbol, timeframe=timeframe)
+    volume_signals = detect_volume_signals(df.copy(), timeframe=timeframe)
+
     # Calculate master confluence
     confluence = calculate_master_confluence(
         hull_signals, ao_signals, alligator_signals, ichimoku_signals, volume_signals
     )
-    
+
     # Get latest values
     latest = df.iloc[-1]
-    
+
     return {
         'symbol': symbol,
+        'timeframe': timeframe,
         'timestamp': latest['timestamp'],
         'datetime': latest['datetime'],
         'price': latest['close'],

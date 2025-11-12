@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wind Catcher & River Turn - Trading System</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <h1>🌪️ Wind Catcher & River Turn 🌊</h1>
+        <div class="system-status">
+            <span id="status-indicator" class="status-dot"></span>
+            <span id="status-text">System Active</span>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <div class="main-container">
+        <!-- Left: Wind Catcher Watchlists -->
+        <aside class="watchlist-panel wind-catcher">
+            <h2>🌪️ Wind Catcher (Bullish)</h2>
+
+            <div class="watchlist" data-direction="wind_catcher" data-timeframe="8h">
+                <h3>
+                    8h Timeframe
+                    <button class="add-btn" onclick="showAddSymbolModal('8h', 'wind_catcher')">+</button>
+                </h3>
+                <ul class="pair-list" id="wind-8h"
+                    ondragover="handleDragOver(event)"
+                    ondragleave="handleDragLeave(event)"
+                    ondrop="handleDrop(event)"></ul>
+            </div>
+
+            <div class="watchlist" data-direction="wind_catcher" data-timeframe="1h">
+                <h3>
+                    1h Timeframe
+                    <button class="add-btn" onclick="showAddSymbolModal('1h', 'wind_catcher')">+</button>
+                </h3>
+                <ul class="pair-list" id="wind-1h"
+                    ondragover="handleDragOver(event)"
+                    ondragleave="handleDragLeave(event)"
+                    ondrop="handleDrop(event)"></ul>
+            </div>
+
+            <div class="watchlist" data-direction="wind_catcher" data-timeframe="15m">
+                <h3>
+                    15m Timeframe
+                    <button class="add-btn" onclick="showAddSymbolModal('15m', 'wind_catcher')">+</button>
+                </h3>
+                <ul class="pair-list" id="wind-15m"
+                    ondragover="handleDragOver(event)"
+                    ondragleave="handleDragLeave(event)"
+                    ondrop="handleDrop(event)"></ul>
+            </div>
+        </aside>
+
+        <!-- Center: Signal Chat Terminal -->
+        <main class="signal-feed">
+            <div class="signal-feed-header">
+                <h2>📡 Signal Feed</h2>
+                <div class="signal-stats" id="signal-stats">
+                    <span class="stat">Today: <strong id="signals-today">0</strong></span>
+                    <span class="stat">⭐ <strong id="perfect-count">0</strong></span>
+                    <span class="stat">🌟 <strong id="excellent-count">0</strong></span>
+                </div>
+            </div>
+            <div id="signal-terminal" class="terminal">
+                <!-- Signals appear here, terminal style -->
+                <div class="welcome-message">
+                    <p>🌐 Wind Catcher & River Turn Trading System</p>
+                    <p>Waiting for signals...</p>
+                </div>
+            </div>
+            <div class="terminal-input">
+                <span class="prompt">></span>
+                <span class="cursor">_</span>
+            </div>
+        </main>
+
+        <!-- Right: River Turn Watchlists -->
+        <aside class="watchlist-panel river-turn">
+            <h2>🌊 River Turn (Bearish)</h2>
+
+            <div class="watchlist" data-direction="river_turn" data-timeframe="8h">
+                <h3>
+                    8h Timeframe
+                    <button class="add-btn" onclick="showAddSymbolModal('8h', 'river_turn')">+</button>
+                </h3>
+                <ul class="pair-list" id="river-8h"
+                    ondragover="handleDragOver(event)"
+                    ondragleave="handleDragLeave(event)"
+                    ondrop="handleDrop(event)"></ul>
+            </div>
+
+            <div class="watchlist" data-direction="river_turn" data-timeframe="1h">
+                <h3>
+                    1h Timeframe
+                    <button class="add-btn" onclick="showAddSymbolModal('1h', 'river_turn')">+</button>
+                </h3>
+                <ul class="pair-list" id="river-1h"
+                    ondragover="handleDragOver(event)"
+                    ondragleave="handleDragLeave(event)"
+                    ondrop="handleDrop(event)"></ul>
+            </div>
+
+            <div class="watchlist" data-direction="river_turn" data-timeframe="15m">
+                <h3>
+                    15m Timeframe
+                    <button class="add-btn" onclick="showAddSymbolModal('15m', 'river_turn')">+</button>
+                </h3>
+                <ul class="pair-list" id="river-15m"
+                    ondragover="handleDragOver(event)"
+                    ondragleave="handleDragLeave(event)"
+                    ondrop="handleDrop(event)"></ul>
+            </div>
+        </aside>
+    </div>
+
+    <!-- Modal for adding symbols (will be created by JavaScript) -->
+    <div id="modal-container"></div>
+
+    <!-- JavaScript -->
+    <script src="/static/js/watchlist.js"></script>
+    <script src="/static/js/signals.js"></script>
+    <script src="/static/js/app.js"></script>
+</body>
+</html>

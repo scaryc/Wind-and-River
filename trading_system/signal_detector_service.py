@@ -8,6 +8,7 @@ import time
 import json
 from datetime import datetime, timedelta
 from master_confluence import analyze_master_confluence, connect_to_database
+from telegram_bot import send_signal_alert
 
 
 def get_user_watchlists(conn):
@@ -239,6 +240,12 @@ def run_signal_detection_loop(interval_seconds=300, min_score=1.2):
                                     print(f"  {emoji} {direction_emoji} NEW: {symbol} [{timeframe}] - "
                                           f"${result['price']:.2f} | Score: {result['confluence']['score']:.1f} "
                                           f"({result['confluence']['classification']})")
+
+                                    # Send Telegram notification
+                                    signal_details = get_signal_by_id(conn, signal_id)
+                                    if signal_details and send_signal_alert(signal_details):
+                                        mark_signal_notified(conn, signal_id)
+                                        print(f"    📱 Telegram alert sent")
                             else:
                                 skipped_count += 1
 

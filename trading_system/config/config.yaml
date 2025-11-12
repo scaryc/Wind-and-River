@@ -1,19 +1,63 @@
-# Configuration file for your trading system
+# Configuration file for Wind Catcher & River Turn Trading System
 
 # Exchange Settings
 exchange:
   name: "gateio"
   api_key: "65c217404b22534986ff458263a8ad22"
   api_secret: "5870517e821a855677afc7171c67d08308169e44265361f303ab575c18156058"
-  
+
 # System Settings
 system:
   test_mode: true
+  data_collection_interval: 300  # 5 minutes (in seconds)
+  signal_scan_interval: 300      # 5 minutes (in seconds)
   max_api_calls_per_second: 2
-  
-# Initial Watchlist
+
+# Timeframes
+timeframes:
+  enabled: ['8h', '1h', '15m']
+  default: '1h'
+
+# Confluence Scoring
+confluence:
+  min_score_alert: 2.5       # EXCELLENT+ for Telegram alerts
+  min_score_display: 1.2     # GOOD+ for web feed display
+
+# Telegram Alerts (Phase 1C)
+telegram:
+  enabled: false  # Set to true after configuring bot
+  bot_token: "YOUR_BOT_TOKEN_HERE"
+  chat_id: "YOUR_CHAT_ID_HERE"
+  min_score: 2.5  # Only alert EXCELLENT+ signals
+
+# Web Interface (Phase 1B)
+web:
+  host: "0.0.0.0"
+  port: 5000
+  update_interval: 60  # Browser polling interval (seconds)
+
+# Backtesting
+backtest:
+  symbols: ["BTC/USDT", "TAO/USDT", "HYPE/USDT"]
+  timeframe: "1h"
+  start_date: "2024-10-03"
+  end_date: "2024-11-03"
+
+# Initial Watchlist (Legacy - for backward compatibility)
 watchlist:
   - "BTC/USDT"
   - "ETH/USDT"
   - "SOL/USDT"
   - "ENA/USDT"
+
+# Initial User Watchlists (Multi-timeframe)
+# These will be auto-created if user_watchlists table is empty
+initial_user_watchlists:
+  wind_catcher:
+    8h: ["BTC/USDT", "SOL/USDT"]
+    1h: ["BTC/USDT", "TAO/USDT"]
+    15m: []
+  river_turn:
+    8h: []
+    1h: ["HYPE/USDT"]
+    15m: []

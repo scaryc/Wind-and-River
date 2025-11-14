@@ -4,23 +4,19 @@ This creates the SQLite database and tables for storing price data
 """
 
 import sqlite3
-import os
 from datetime import datetime
+from utils import ensure_directories, DATABASE_FILE, get_current_timestamp
 
 def create_database():
     """Create the main database file"""
-    # Create the database directory if it doesn't exist
-    if not os.path.exists('data'):
-        os.makedirs('data')
-        print("✅ Created data directory")
-    
-    # Database file path
-    db_path = 'data/trading_system.db'
-    
+    # Ensure data directory exists
+    ensure_directories()
+    print("✅ Created/verified data directory")
+
     # Connect to database (creates file if it doesn't exist)
-    conn = sqlite3.connect(db_path)
-    print(f"✅ Connected to database: {db_path}")
-    
+    conn = sqlite3.connect(str(DATABASE_FILE))
+    print(f"✅ Connected to database: {DATABASE_FILE}")
+
     return conn
 
 def create_tables(conn):
@@ -80,9 +76,10 @@ def create_tables(conn):
 def add_initial_watchlist(conn):
     """Add initial coins to watchlist"""
     cursor = conn.cursor()
-    
-    initial_coins = ['BTC/USDT', 'ETH/USDT', 'SOL/USDT', 'BNB/USDT', 'ADA/USDT']
-    current_time = int(datetime.now().timestamp())
+
+    # Empty watchlist - user will add their own pairs
+    initial_coins = []
+    current_time = get_current_timestamp()
     
     for symbol in initial_coins:
         try:
@@ -94,7 +91,10 @@ def add_initial_watchlist(conn):
             print(f"⚠️ Could not add {symbol}: {e}")
     
     conn.commit()
-    print(f"✅ Added {len(initial_coins)} coins to watchlist")
+    if initial_coins:
+        print(f"✅ Added {len(initial_coins)} coins to watchlist")
+    else:
+        print("✅ Watchlist table created (empty - add your coins with update_watchlist.py)")
 
 def show_database_info(conn):
     """Show some basic info about the database"""

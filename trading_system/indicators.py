@@ -1,22 +1,15 @@
 """
 Technical Indicators for Wind Catcher & River Turn Trading System
 Hull Moving Average and other indicators from your trading philosophy
+
+This is the CANONICAL indicators module - all other scripts should import from here
+to ensure consistent calculations across the entire system.
 """
 
 import pandas as pd
 import numpy as np
-import sqlite3
-import yaml
 from datetime import datetime
-
-def load_config():
-    """Load configuration"""
-    with open('config/config.yaml', 'r') as file:
-        return yaml.safe_load(file)
-
-def connect_to_database():
-    """Connect to database"""
-    return sqlite3.connect('data/trading_system.db')
+from utils import load_config, connect_to_database
 
 def get_price_data(conn, symbol, timeframe='1h', limit=100):
     """Get price data from database for indicator calculation"""
@@ -233,14 +226,24 @@ def main():
     """Main indicator analysis function"""
     print("🚀 Wind Catcher & River Turn - Technical Indicators")
     print("="*60)
-    
+
     # Connect to database
-    conn = connect_to_database()
-    
+    try:
+        conn = connect_to_database()
+    except FileNotFoundError as e:
+        print(f"❌ {e}")
+        return
+    except Exception as e:
+        print(f"❌ Database connection failed: {e}")
+        return
+
     # Get watchlist
     cursor = conn.cursor()
-    cursor.execute("SELECT symbol FROM watchlist WHERE active = 1")
-    watchlist = [row[0] for row in cursor.fetchall()]
+    try:
+        cursor.execute("SELECT symbol FROM watchlist WHERE active = 1")
+        watchlist = [row[0] for row in cursor.fetchall()]
+    finally:
+        cursor.close()
     
     print(f"📊 Analyzing {len(watchlist)} symbols with Hull Moving Averages...")
     print("-" * 60)

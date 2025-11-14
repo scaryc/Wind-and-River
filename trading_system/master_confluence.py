@@ -5,18 +5,19 @@ Imports from dedicated analyzer files to maintain modular architecture
 
 import pandas as pd
 import numpy as np
-import sqlite3
-import yaml
 from datetime import datetime
+from utils import load_config, connect_to_database
 
-def load_config():
-    """Load configuration"""
-    with open('config/config.yaml', 'r') as file:
-        return yaml.safe_load(file)
-
-def connect_to_database():
-    """Connect to database"""
-    return sqlite3.connect('data/trading_system.db')
+# Import analyzer modules properly
+try:
+    import enhanced_hull_analyzer
+    import enhanced_indicators
+    import alligator_analyzer
+    import ichimoku_analyzer
+except ImportError as e:
+    print(f"❌ Error importing analyzer modules: {e}")
+    print("   Make sure all analyzer files are in the same directory")
+    raise
 
 def get_price_data(conn, symbol, timeframe='1h', limit=200):
     """Get price data for analysis"""
@@ -37,32 +38,21 @@ def get_price_data(conn, symbol, timeframe='1h', limit=200):
     df['datetime'] = pd.to_datetime(df['timestamp'], unit='s')
     return df
 
-# Import analyzer functions
+# Analyzer wrapper functions with proper error handling
 def get_hull_signals(conn, symbol):
     """Get Hull MA signals from enhanced_hull_analyzer"""
     try:
-        # Import the analyze function from enhanced_hull_analyzer
-        import importlib.util
-        spec = importlib.util.spec_from_file_location("enhanced_hull_analyzer", "enhanced_hull_analyzer.py")
-        hull_module = importlib.util.module_from_spec(spec)
-        spec.loader.exec_module(hull_module)
-        
-        result = hull_module.analyze_symbol_hull(conn, symbol)
+        result = enhanced_hull_analyzer.analyze_symbol_hull(conn, symbol)
         return result['all_signals'] if result else []
     except Exception as e:
-        print(f"Error importing Hull analyzer: {e}")
+        print(f"⚠️ Error getting Hull signals for {symbol}: {e}")
         return []
 
 def get_ao_signals(conn, symbol):
     """Get AO divergence signals from enhanced_indicators"""
     try:
-        import importlib.util
-        spec = importlib.util.spec_from_file_location("enhanced_indicators", "enhanced_indicators.py")
-        ao_module = importlib.util.module_from_spec(spec)
-        spec.loader.exec_module(ao_module)
-        
-        result = ao_module.analyze_symbol_with_ao(conn, symbol)
-        if result and result['ao_analysis']['divergences']:
+        result = enhanced_indicators.analyze_symbol_with_ao(conn, symbol)
+        if result and result.get('ao_analysis', {}).get('divergences'):
             signals = []
             for div in result['ao_analysis']['divergences']:
                 signals.append({
@@ -74,19 +64,14 @@ def get_ao_signals(conn, symbol):
             return signals
         return []
     except Exception as e:
-        print(f"Error importing AO analyzer: {e}")
+        print(f"⚠️ Error getting AO signals for {symbol}: {e}")
         return []
 
 def get_alligator_signals(conn, symbol):
     """Get Alligator signals from alligator_analyzer"""
     try:
-        import importlib.util
-        spec = importlib.util.spec_from_file_location("alligator_analyzer", "alligator_analyzer.py")
-        alligator_module = importlib.util.module_from_spec(spec)
-        spec.loader.exec_module(alligator_module)
-        
-        result = alligator_module.analyze_symbol_alligator(conn, symbol)
-        if result and result['retracement_events']:
+        result = alligator_analyzer.analyze_symbol_alligator(conn, symbol)
+        if result and result.get('retracement_events'):
             signals = []
             for event in result['retracement_events']:
                 if event['type'] in ['blue_line_contact', 'zone_entry']:
@@ -100,19 +85,14 @@ def get_alligator_signals(conn, symbol):
             return signals
         return []
     except Exception as e:
-        print(f"Error importing Alligator analyzer: {e}")
+        print(f"⚠️ Error getting Alligator signals for {symbol}: {e}")
         return []
 
 def get_ichimoku_signals(conn, symbol):
     """Get Ichimoku signals from ichimoku_analyzer"""
     try:
-        import importlib.util
-        spec = importlib.util.spec_from_file_location("ichimoku_analyzer", "ichimoku_analyzer.py")
-        ichimoku_module = importlib.util.module_from_spec(spec)
-        spec.loader.exec_module(ichimoku_module)
-        
-        result = ichimoku_module.analyze_symbol_ichimoku(conn, symbol)
-        if result and result['significant_events']:
+        result = ichimoku_analyzer.analyze_symbol_ichimoku(conn, symbol)
+        if result and result.get('significant_events'):
             signals = []
             for event in result['significant_events']:
                 if event['type'] == 'kijun_touch':
@@ -121,7 +101,7 @@ def get_ichimoku_signals(conn, symbol):
                     system = 'wind_catcher' if 'green' in event.get('cloud_color', '') else 'river_turn'
                 else:
                     system = 'wind_catcher'
-                
+
                 signals.append({
                     'type': event['type'],
                     'system': system,
@@ -131,7 +111,7 @@ def get_ichimoku_signals(conn, symbol):
             return signals
         return []
     except Exception as e:
-        print(f"Error importing Ichimoku analyzer: {e}")
+        print(f"⚠️ Error getting Ichimoku signals for {symbol}: {e}")
         return []
 
 def detect_volume_signals(df, monitoring_candles=3):
@@ -292,12 +272,22 @@ def main():
     print("="*80)
     print("Combining Hull + AO + Alligator + Ichimoku + Volume Analysis")
     print("-"*80)
-    
-    conn = connect_to_database()
-    
+
+    try:
+        conn = connect_to_database()
+    except FileNotFoundError as e:
+        print(f"❌ {e}")
+        return
+    except Exception as e:
+        print(f"❌ Database connection failed: {e}")
+        return
+
     cursor = conn.cursor()
-    cursor.execute("SELECT symbol FROM watchlist WHERE active = 1")
-    watchlist = [row[0] for row in cursor.fetchall()]
+    try:
+        cursor.execute("SELECT symbol FROM watchlist WHERE active = 1")
+        watchlist = [row[0] for row in cursor.fetchall()]
+    finally:
+        cursor.close()
     
     results = []
     

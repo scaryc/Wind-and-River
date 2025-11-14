@@ -1,19 +1,20 @@
-# Configuration file for your trading system
+# Configuration file for Wind Catcher & River Turn Trading System
 
 # Exchange Settings
 exchange:
-  name: "gateio"
-  api_key: "65c217404b22534986ff458263a8ad22"
-  api_secret: "5870517e821a855677afc7171c67d08308169e44265361f303ab575c18156058"
-  
+  name: "hyperliquid"
+  use_testnet: false  # Set to true for testnet, false for mainnet
+
 # System Settings
 system:
   test_mode: true
-  max_api_calls_per_second: 2
-  
-# Initial Watchlist
+  max_api_calls_per_second: 5  # Hyperliquid is more generous
+
+# Initial Watchlist (Add your coins here)
+# Note: Hyperliquid uses coin names without /USDT (e.g., "BTC" not "BTC/USDT")
 watchlist:
-  - "BTC/USDT"
-  - "ETH/USDT"
-  - "SOL/USDT"
-  - "ENA/USDT"
+  # Add your trading pairs here using update_watchlist.py
+  # Examples:
+  # - "BTC"
+  # - "ETH"
+  # - "SOL"

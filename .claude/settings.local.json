@@ -1,0 +1,18 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(del indicator_verification.py fixed_indicator_verification.py hull_ma_debug.py ena_hull_debug.py)",
+      "Bash(pip show:*)",
+      "Bash(dir:*)",
+      "Bash(test:*)",
+      "Bash(python:*)",
+      "Bash(sqlite3:*)",
+      "Bash(./venv/Scripts/python.exe:*)",
+      "Bash(./venv/Scripts/pip.exe:*)",
+      "Bash(python3:*)",
+      "Bash(mkdir:*)"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}

@@ -9,3 +9,10 @@
 [2025-09-10 11:38:02] INFO:    🔄 Every hour - Data updates
 [2025-09-10 11:38:02] INFO:    📊 08:00, 14:00, 20:00 - Dashboard analysis
 [2025-09-10 11:48:18] INFO: ⏹️ Auto-updater stopped by user
+[2025-11-13 09:43:06] INFO: ✅ Connected to Hyperliquid Mainnet
+[2025-11-13 09:43:06] ERROR: ❌ Error fetching BTC data: Info.candles_snapshot() got an unexpected keyword argument 'coin'
+[2025-11-13 09:43:06] INFO: 📋 Found 221 available markets
+[2025-11-13 09:43:10] INFO: ✅ Connected to Hyperliquid Mainnet
+[2025-11-13 09:43:10] ERROR: ❌ Error fetching BTC/USDT data: Info.candles_snapshot() got an unexpected keyword argument 'coin'
+[2025-11-13 09:43:10] ERROR: ❌ Error fetching ENA/USDT data: Info.candles_snapshot() got an unexpected keyword argument 'coin'
+[2025-11-13 09:43:11] ERROR: ❌ Error fetching HYPE/USDT data: Info.candles_snapshot() got an unexpected keyword argument 'coin'

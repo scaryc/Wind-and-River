@@ -62,12 +62,12 @@ def get_watchlists():
     Returns:
         {
             "wind_catcher": {
-                "8h": ["BTC", "SOL"],
+                "12h": ["BTC", "SOL"],
                 "1h": ["BTC", "TAO"],
                 "15m": ["BTC", "SOL"]
             },
             "river_turn": {
-                "8h": ["ETH", "SOL"],
+                "12h": ["ETH", "SOL"],
                 "1h": ["TAO", "HYPE"],
                 "15m": ["BTC", "ETH"]
             }
@@ -87,8 +87,8 @@ def get_watchlists():
 
         # Organize by direction and timeframe
         watchlists = {
-            'wind_catcher': {'8h': [], '1h': [], '15m': [], '4h': []},
-            'river_turn': {'8h': [], '1h': [], '15m': [], '4h': []}
+            'wind_catcher': {'12h': [], '1h': [], '15m': [], '4h': []},
+            'river_turn': {'12h': [], '1h': [], '15m': [], '4h': []}
         }
 
         for row in rows:
@@ -129,7 +129,7 @@ def add_to_watchlist():
     if direction not in ['wind_catcher', 'river_turn']:
         return jsonify({'error': 'Invalid direction'}), 400
 
-    if timeframe not in ['15m', '1h', '4h', '8h']:
+    if timeframe not in ['15m', '1h', '4h', '12h']:
         return jsonify({'error': 'Invalid timeframe'}), 400
 
     conn = get_db_connection()
@@ -200,7 +200,7 @@ def move_watchlist_entry():
 
     Body: {
         "symbol": "BTC",
-        "from": {"timeframe": "8h", "direction": "wind_catcher"},
+        "from": {"timeframe": "12h", "direction": "wind_catcher"},
         "to": {"timeframe": "1h", "direction": "river_turn"}
     }
     """

@@ -61,10 +61,10 @@ Implement Phase C from Option 2: Web Interface to provide a beautiful, browser-b
 │  CATCHER   │    TERMINAL              │   TURN     │
 │  (25%)     │    (50%)                 │   (25%)    │
 │            │                          │            │
-│ 8h  [+]    │ [14:30:22] ⭐ PERFECT   │ 8h  [+]    │
+│ 12h [+]    │ [14:30:22] ⭐ PERFECT   │ 12h [+]    │
 │ ┌────────┐ │ BTC Bullish             │ ┌────────┐ │
 │ │BTC     │ │ $67,234 | Score: 3.2   │ │ETH     │ │
-│ │SOL     │ │ Hull+AO+Vol | 8h       │ │SOL     │ │
+│ │SOL     │ │ Hull+AO+Vol | 12h      │ │SOL     │ │
 │ └────────┘ │                          │ └────────┘ │
 │            │ [Scrolling feed...]      │            │
 │ 1h  [+]    │                          │ 1h  [+]    │
@@ -276,7 +276,7 @@ checkHealth()  // Verify API is responding
 
 ✅ GET /api/watchlists
    Response: Properly organized by direction and timeframe
-   Data: BTC on 8h/1h, ETH on 1h, SOL on 15m
+   Data: BTC on 12h/1h, ETH on 1h, SOL on 15m
 
 ✅ GET /api/signals/recent
    Response: {"signals": [], "latest_timestamp": 0}
@@ -327,7 +327,7 @@ trading_system/web/
 ## 🎯 Key Features Delivered
 
 ### 1. Multi-Timeframe Watchlist Management ✅
-- Separate watchlists for each timeframe (8h, 1h, 15m)
+- Separate watchlists for each timeframe (12h, 1h, 15m)
 - Wind Catcher (bullish) vs River Turn (bearish) panels
 - Visual distinction with blue/red accents
 

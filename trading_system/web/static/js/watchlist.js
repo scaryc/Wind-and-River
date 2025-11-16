@@ -22,12 +22,12 @@ async function loadWatchlists() {
         }
 
         // Render Wind Catcher watchlists
-        renderWatchlist('wind', '8h', data.wind_catcher['8h'] || []);
+        renderWatchlist('wind', '12h', data.wind_catcher['12h'] || []);
         renderWatchlist('wind', '1h', data.wind_catcher['1h'] || []);
         renderWatchlist('wind', '15m', data.wind_catcher['15m'] || []);
 
         // Render River Turn watchlists
-        renderWatchlist('river', '8h', data.river_turn['8h'] || []);
+        renderWatchlist('river', '12h', data.river_turn['12h'] || []);
         renderWatchlist('river', '1h', data.river_turn['1h'] || []);
         renderWatchlist('river', '15m', data.river_turn['15m'] || []);
 

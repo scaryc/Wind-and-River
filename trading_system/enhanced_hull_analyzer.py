@@ -205,9 +205,9 @@ def detect_hull_cross_retests(df, lookback=20):
     
     return retests
 
-def analyze_symbol_hull(conn, symbol):
+def analyze_symbol_hull(conn, symbol, timeframe='1h'):
     """Complete Hull MA analysis for a symbol"""
-    df = get_price_data(conn, symbol, timeframe='1h', limit=200)
+    df = get_price_data(conn, symbol, timeframe=timeframe, limit=200)
     if df is None or len(df) < 50:
         return None
     

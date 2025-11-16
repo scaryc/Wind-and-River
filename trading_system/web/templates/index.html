@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wind Catcher & River Turn - Trading System</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-content">
+            <h1>🌪️ Wind Catcher & River Turn 🌊</h1>
+            <div class="system-status">
+                <span id="status-indicator" class="status-dot">●</span>
+                <span id="status-text">Loading...</span>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Container: 3-column layout -->
+    <div class="main-container">
+        <!-- Left Column: Wind Catcher (Bullish) -->
+        <aside class="watchlist-panel wind-catcher">
+            <h2>🌪️ Wind Catcher</h2>
+            <p class="panel-description">Bullish Signals</p>
+
+            <!-- 12h Timeframe -->
+            <div class="watchlist" data-timeframe="12h" data-direction="wind_catcher">
+                <h3>
+                    <span>12h Timeframe</span>
+                    <button class="add-btn" onclick="showAddSymbolModal('12h', 'wind_catcher')">+</button>
+                </h3>
+                <ul class="pair-list" id="wind-12h"></ul>
+            </div>
+
+            <!-- 1h Timeframe -->
+            <div class="watchlist" data-timeframe="1h" data-direction="wind_catcher">
+                <h3>
+                    <span>1h Timeframe</span>
+                    <button class="add-btn" onclick="showAddSymbolModal('1h', 'wind_catcher')">+</button>
+                </h3>
+                <ul class="pair-list" id="wind-1h"></ul>
+            </div>
+
+            <!-- 15m Timeframe -->
+            <div class="watchlist" data-timeframe="15m" data-direction="wind_catcher">
+                <h3>
+                    <span>15m Timeframe</span>
+                    <button class="add-btn" onclick="showAddSymbolModal('15m', 'wind_catcher')">+</button>
+                </h3>
+                <ul class="pair-list" id="wind-15m"></ul>
+            </div>
+        </aside>
+
+        <!-- Center Column: Signal Feed -->
+        <main class="signal-feed">
+            <div class="feed-header">
+                <h2>📡 Signal Feed</h2>
+                <div class="feed-stats">
+                    <span id="signal-count">0 signals today</span>
+                </div>
+            </div>
+
+            <div id="signal-terminal" class="terminal">
+                <div class="terminal-welcome">
+                    <p>🌟 Welcome to Wind Catcher & River Turn</p>
+                    <p class="terminal-info">Signals will appear here as they are detected...</p>
+                </div>
+            </div>
+
+            <div class="terminal-input">
+                <span class="prompt">></span>
+                <span class="cursor">_</span>
+                <span class="terminal-status">Monitoring...</span>
+            </div>
+        </main>
+
+        <!-- Right Column: River Turn (Bearish) -->
+        <aside class="watchlist-panel river-turn">
+            <h2>🌊 River Turn</h2>
+            <p class="panel-description">Bearish Signals</p>
+
+            <!-- 12h Timeframe -->
+            <div class="watchlist" data-timeframe="12h" data-direction="river_turn">
+                <h3>
+                    <span>12h Timeframe</span>
+                    <button class="add-btn" onclick="showAddSymbolModal('12h', 'river_turn')">+</button>
+                </h3>
+                <ul class="pair-list" id="river-12h"></ul>
+            </div>
+
+            <!-- 1h Timeframe -->
+            <div class="watchlist" data-timeframe="1h" data-direction="river_turn">
+                <h3>
+                    <span>1h Timeframe</span>
+                    <button class="add-btn" onclick="showAddSymbolModal('1h', 'river_turn')">+</button>
+                </h3>
+                <ul class="pair-list" id="river-1h"></ul>
+            </div>
+
+            <!-- 15m Timeframe -->
+            <div class="watchlist" data-timeframe="15m" data-direction="river_turn">
+                <h3>
+                    <span>15m Timeframe</span>
+                    <button class="add-btn" onclick="showAddSymbolModal('15m', 'river_turn')">+</button>
+                </h3>
+                <ul class="pair-list" id="river-15m"></ul>
+            </div>
+        </aside>
+    </div>
+
+    <!-- Modal for Adding Symbols -->
+    <div id="add-symbol-modal" class="modal-overlay" style="display: none;">
+        <div class="modal-content">
+            <h3>Add Symbol to Watchlist</h3>
+            <p class="modal-info">
+                <span id="modal-direction-label"></span> -
+                <span id="modal-timeframe-label"></span>
+            </p>
+            <input
+                type="text"
+                id="symbol-input"
+                placeholder="Enter symbol (e.g., BTC, ETH, SOL)"
+                autocomplete="off"
+            />
+            <div class="modal-actions">
+                <button class="btn-secondary" onclick="closeAddSymbolModal()">Cancel</button>
+                <button class="btn-primary" onclick="confirmAddSymbol()">Add</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="{{ url_for('static', filename='js/watchlist.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/signals.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/app.js') }}"></script>
+</body>
+</html>

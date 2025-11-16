@@ -245,9 +245,9 @@ def analyze_retracement_history(df, jaw, teeth, lips, trend_direction, lookback=
     
     return recent_events
 
-def analyze_symbol_alligator(conn, symbol):
+def analyze_symbol_alligator(conn, symbol, timeframe='1h'):
     """Complete Alligator analysis for a symbol"""
-    df = get_price_data(conn, symbol, timeframe='1h', limit=200)
+    df = get_price_data(conn, symbol, timeframe=timeframe, limit=200)
     if df is None or len(df) < 150:
         return None
     

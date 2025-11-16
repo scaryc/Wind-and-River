@@ -203,9 +203,9 @@ def analyze_ao_divergences(df):
         'ao_pivots_low': ao_lows
     }
 
-def analyze_symbol_with_ao(conn, symbol):
+def analyze_symbol_with_ao(conn, symbol, timeframe='1h'):
     """Complete analysis including AO divergences"""
-    df = get_price_data(conn, symbol, timeframe='1h', limit=200)
+    df = get_price_data(conn, symbol, timeframe=timeframe, limit=200)
     if df is None or len(df) < 100:
         return None
     

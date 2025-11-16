@@ -9,6 +9,28 @@ exchange:
 system:
   test_mode: true
   max_api_calls_per_second: 5  # Hyperliquid is more generous
+  data_collection_interval: 300  # 5 minutes (in seconds)
+  signal_scan_interval: 300      # 5 minutes (in seconds)
+
+# Confluence Scoring Thresholds
+confluence:
+  min_score_alert: 2.5       # EXCELLENT+ signals for Telegram alerts
+  min_score_display: 1.2     # GOOD+ signals for display/storage
+
+# Telegram Alert Settings
+telegram:
+  enabled: false  # Set to true to enable Telegram notifications
+  bot_token: "YOUR_BOT_TOKEN_HERE"  # Get from @BotFather
+  chat_id: "YOUR_CHAT_ID_HERE"      # Your Telegram user ID
+  min_score: 2.5  # Only send EXCELLENT+ signals (score >= 2.5)
+  alert_emojis:
+    perfect: "⭐"
+    excellent: "🌟"
+    very_good: "✨"
+    good: "💫"
+  system_emojis:
+    wind_catcher: "🌪️"
+    river_turn: "🌊"
 
 # Initial Watchlist (Add your coins here)
 # Note: Hyperliquid uses coin names without /USDT (e.g., "BTC" not "BTC/USDT")

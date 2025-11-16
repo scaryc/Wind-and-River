@@ -16,3 +16,4 @@
 [2025-11-13 09:43:10] ERROR: ❌ Error fetching BTC/USDT data: Info.candles_snapshot() got an unexpected keyword argument 'coin'
 [2025-11-13 09:43:10] ERROR: ❌ Error fetching ENA/USDT data: Info.candles_snapshot() got an unexpected keyword argument 'coin'
 [2025-11-13 09:43:11] ERROR: ❌ Error fetching HYPE/USDT data: Info.candles_snapshot() got an unexpected keyword argument 'coin'
+[2025-11-16 13:48:10] ERROR: ❌ Failed to connect to Hyperliquid: (403, None, 'Access denied', None, {'content-length': '13', 'content-type': 'text/plain', 'date': 'Sun, 16 Nov 2025 13:48:10 GMT', 'connection': 'close'})

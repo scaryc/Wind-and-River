@@ -39,19 +39,19 @@ def get_price_data(conn, symbol, timeframe='1h', limit=200):
     return df
 
 # Analyzer wrapper functions with proper error handling
-def get_hull_signals(conn, symbol):
+def get_hull_signals(conn, symbol, timeframe='1h'):
     """Get Hull MA signals from enhanced_hull_analyzer"""
     try:
-        result = enhanced_hull_analyzer.analyze_symbol_hull(conn, symbol)
+        result = enhanced_hull_analyzer.analyze_symbol_hull(conn, symbol, timeframe)
         return result['all_signals'] if result else []
     except Exception as e:
         print(f"⚠️ Error getting Hull signals for {symbol}: {e}")
         return []
 
-def get_ao_signals(conn, symbol):
+def get_ao_signals(conn, symbol, timeframe='1h'):
     """Get AO divergence signals from enhanced_indicators"""
     try:
-        result = enhanced_indicators.analyze_symbol_with_ao(conn, symbol)
+        result = enhanced_indicators.analyze_symbol_with_ao(conn, symbol, timeframe)
         if result and result.get('ao_analysis', {}).get('divergences'):
             signals = []
             for div in result['ao_analysis']['divergences']:
@@ -67,10 +67,10 @@ def get_ao_signals(conn, symbol):
         print(f"⚠️ Error getting AO signals for {symbol}: {e}")
         return []
 
-def get_alligator_signals(conn, symbol):
+def get_alligator_signals(conn, symbol, timeframe='1h'):
     """Get Alligator signals from alligator_analyzer"""
     try:
-        result = alligator_analyzer.analyze_symbol_alligator(conn, symbol)
+        result = alligator_analyzer.analyze_symbol_alligator(conn, symbol, timeframe)
         if result and result.get('retracement_events'):
             signals = []
             for event in result['retracement_events']:
@@ -88,10 +88,10 @@ def get_alligator_signals(conn, symbol):
         print(f"⚠️ Error getting Alligator signals for {symbol}: {e}")
         return []
 
-def get_ichimoku_signals(conn, symbol):
+def get_ichimoku_signals(conn, symbol, timeframe='1h'):
     """Get Ichimoku signals from ichimoku_analyzer"""
     try:
-        result = ichimoku_analyzer.analyze_symbol_ichimoku(conn, symbol)
+        result = ichimoku_analyzer.analyze_symbol_ichimoku(conn, symbol, timeframe)
         if result and result.get('significant_events'):
             signals = []
             for event in result['significant_events']:
@@ -232,17 +232,17 @@ def calculate_master_confluence(hull_signals, ao_signals, alligator_signals, ich
         'signal_count': signal_count
     }
 
-def analyze_master_confluence(conn, symbol):
+def analyze_master_confluence(conn, symbol, timeframe='1h'):
     """Master confluence analysis combining all indicators"""
-    df = get_price_data(conn, symbol, timeframe='1h', limit=200)
+    df = get_price_data(conn, symbol, timeframe=timeframe, limit=200)
     if df is None or len(df) < 150:
         return None
-    
+
     # Get signals from all dedicated analyzers
-    hull_signals = get_hull_signals(conn, symbol)
-    ao_signals = get_ao_signals(conn, symbol)
-    alligator_signals = get_alligator_signals(conn, symbol)
-    ichimoku_signals = get_ichimoku_signals(conn, symbol)
+    hull_signals = get_hull_signals(conn, symbol, timeframe)
+    ao_signals = get_ao_signals(conn, symbol, timeframe)
+    alligator_signals = get_alligator_signals(conn, symbol, timeframe)
+    ichimoku_signals = get_ichimoku_signals(conn, symbol, timeframe)
     volume_signals = detect_volume_signals(df.copy())
     
     # Calculate master confluence
@@ -255,6 +255,7 @@ def analyze_master_confluence(conn, symbol):
     
     return {
         'symbol': symbol,
+        'timeframe': timeframe,
         'timestamp': latest['timestamp'],
         'datetime': latest['datetime'],
         'price': latest['close'],

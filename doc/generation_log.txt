@@ -1,0 +1,104 @@
+🚀 Historical Signals Report Generator
+================================================================================
+📋 Configuration:
+   Symbols: BTC, ETH, DOT, FET, HYPE, ICP
+   Timeframes: 12h, 1h, 15m
+   Lookback: 14 days
+   Output: ..\doc\SIGNALS_REPORT_2_WEEKS.xlsx
+================================================================================
+
+🔄 STEP 1: Data Collection
+2025-11-17 10:23:51 - ✅ Connected to Hyperliquid Mainnet
+
+📥 Collecting 14 days of historical data...
+================================================================================
+
+[1/18] BTC (12h)... 2025-11-17 10:23:51 - 📥 Fetched 29 candles for BTC (12h)
+✅ 29 candles
+
+[2/18] BTC (1h)... 2025-11-17 10:23:52 - 📥 Fetched 337 candles for BTC (1h)
+✅ 337 candles
+
+[3/18] BTC (15m)... 2025-11-17 10:23:54 - 📥 Fetched 1345 candles for BTC (15m)
+✅ 1345 candles
+
+[4/18] ETH (12h)... 2025-11-17 10:23:54 - 📥 Fetched 29 candles for ETH (12h)
+✅ 29 candles
+
+[5/18] ETH (1h)... 2025-11-17 10:23:55 - 📥 Fetched 337 candles for ETH (1h)
+✅ 337 candles
+
+[6/18] ETH (15m)... 2025-11-17 10:23:56 - 📥 Fetched 1345 candles for ETH (15m)
+✅ 1345 candles
+
+[7/18] DOT (12h)... 2025-11-17 10:23:57 - 📥 Fetched 29 candles for DOT (12h)
+✅ 29 candles
+
+[8/18] DOT (1h)... 2025-11-17 10:23:58 - 📥 Fetched 337 candles for DOT (1h)
+✅ 337 candles
+
+[9/18] DOT (15m)... 2025-11-17 10:23:59 - 📥 Fetched 1345 candles for DOT (15m)
+✅ 1345 candles
+
+[10/18] FET (12h)... 2025-11-17 10:23:59 - 📥 Fetched 29 candles for FET (12h)
+✅ 29 candles
+
+[11/18] FET (1h)... 2025-11-17 10:24:00 - 📥 Fetched 337 candles for FET (1h)
+✅ 337 candles
+
+[12/18] FET (15m)... 2025-11-17 10:24:02 - 📥 Fetched 1345 candles for FET (15m)
+✅ 1345 candles
+
+[13/18] HYPE (12h)... 2025-11-17 10:24:02 - 📥 Fetched 29 candles for HYPE (12h)
+✅ 29 candles
+
+[14/18] HYPE (1h)... 2025-11-17 10:24:03 - 📥 Fetched 337 candles for HYPE (1h)
+✅ 337 candles
+
+[15/18] HYPE (15m)... 2025-11-17 10:24:04 - 📥 Fetched 1345 candles for HYPE (15m)
+✅ 1345 candles
+
+[16/18] ICP (12h)... 2025-11-17 10:24:05 - 📥 Fetched 29 candles for ICP (12h)
+✅ 29 candles
+
+[17/18] ICP (1h)... 2025-11-17 10:24:06 - 📥 Fetched 337 candles for ICP (1h)
+✅ 337 candles
+
+[18/18] ICP (15m)... 2025-11-17 10:24:07 - 📥 Fetched 1345 candles for ICP (15m)
+✅ 1345 candles
+
+================================================================================
+✅ Data collection complete: 18/18 successful
+
+🔄 STEP 2: Database Storage
+
+💾 Storing data in database...
+✅ Stored 10,266 candles in database
+
+🔄 STEP 3: Signal Generation
+
+🔍 Generating signals for all data...
+================================================================================
+
+[1/18] Analyzing BTC (12h)...
+Traceback (most recent call last):
+  File "C:\Users\peter\wind and river\trading_system\generate_historical_signals_report.py", line 278, in <module>
+    main()
+  File "C:\Users\peter\wind and river\trading_system\generate_historical_signals_report.py", line 266, in main
+    signals = generate_signals_for_all_data()
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\peter\wind and river\trading_system\generate_historical_signals_report.py", line 133, in generate_signals_for_all_data
+    result = analyze_master_confluence(symbol, timeframe)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\peter\wind and river\trading_system\master_confluence.py", line 245, in analyze_master_confluence
+    df = get_price_data(conn, symbol, timeframe=timeframe, limit=200)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\peter\wind and river\trading_system\master_confluence.py", line 40, in get_price_data
+    df = pd.read_sql_query(query, conn, params=(symbol, timeframe, limit))
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\peter\wind and river\trading_system\venv\Lib\site-packages\pandas\io\sql.py", line 527, in read_sql_query
+    with pandasSQL_builder(con) as pandas_sql:
+         ^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\peter\wind and river\trading_system\venv\Lib\site-packages\pandas\io\sql.py", line 905, in pandasSQL_builder
+    raise ImportError("Using URI string without sqlalchemy installed.")
+ImportError: Using URI string without sqlalchemy installed.

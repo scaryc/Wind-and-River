@@ -75,11 +75,12 @@ class HyperliquidConnector:
             start_time = self._calculate_start_time(end_time, timeframe, limit)
 
             # Fetch candles from Hyperliquid
+            # Note: Hyperliquid SDK v0.20+ uses different API
             candles = self.info.candles_snapshot(
-                coin=coin_name,
-                interval=timeframe,
-                startTime=start_time,
-                endTime=end_time
+                coin_name,  # First positional arg: symbol
+                timeframe,  # Second positional arg: interval
+                start_time,  # Third positional arg: startTime
+                end_time    # Fourth positional arg: endTime
             )
 
             # Convert to standard format
@@ -275,6 +276,13 @@ def connect_to_hyperliquid(use_testnet=False):
 
 # Example usage and testing
 if __name__ == "__main__":
+    import sys
+    import io
+
+    # Fix Windows console encoding
+    if sys.platform == 'win32':
+        sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8', errors='replace')
+
     print("🔗 Hyperliquid Connector Test")
     print("="*60)
 

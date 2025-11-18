@@ -3,6 +3,14 @@ Master Confluence System for Wind Catcher & River Turn
 Imports from dedicated analyzer files to maintain modular architecture
 """
 
+import sys
+import io
+
+# Fix Windows console encoding
+if sys.platform == 'win32':
+    sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8', errors='replace')
+    sys.stderr = io.TextIOWrapper(sys.stderr.buffer, encoding='utf-8', errors='replace')
+
 import pandas as pd
 import numpy as np
 from datetime import datetime

@@ -4,6 +4,14 @@ Continuously scans user_watchlists and detects new confluence signals
 Sends Telegram alerts for EXCELLENT+ signals
 """
 
+import sys
+import io
+
+# Fix Windows console encoding
+if sys.platform == 'win32':
+    sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8', errors='replace')
+    sys.stderr = io.TextIOWrapper(sys.stderr.buffer, encoding='utf-8', errors='replace')
+
 import time
 import json
 from datetime import datetime

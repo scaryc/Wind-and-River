@@ -1,0 +1,4 @@
+Traceback (most recent call last):
+  File "C:\Users\peter\wind and river\trading_system\batch_historical_analyzer.py", line 25, in <module>
+    from enhanced_hull_analyzer import analyze_hull_ma
+ImportError: cannot import name 'analyze_hull_ma' from 'enhanced_hull_analyzer' (C:\Users\peter\wind and river\trading_system\enhanced_hull_analyzer.py)

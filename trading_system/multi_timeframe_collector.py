@@ -3,6 +3,13 @@ Multi-Timeframe Data Collector for Wind Catcher & River Turn
 Collects data for all symbols/timeframes in user_watchlists
 """
 
+import sys
+import io
+
+# Fix Windows console encoding
+if sys.platform == 'win32':
+    sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8', errors='replace')
+
 import sqlite3
 from datetime import datetime
 import time

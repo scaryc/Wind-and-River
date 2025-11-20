@@ -29,7 +29,8 @@
       "Bash(/c/Users/peter/AppData/Local/Microsoft/WindowsApps/python.exe:*)",
       "Bash(timeout 30 ./venv/Scripts/python.exe:*)",
       "Bash(tee:*)",
-      "Bash(del \".git\\index.lock\")"
+      "Bash(del \".git\\index.lock\")",
+      "Bash(git checkout:*)"
     ],
     "deny": [],
     "ask": []

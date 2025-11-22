@@ -288,46 +288,172 @@ def print_trading_recommendations(results):
     if not any([perfect_signals, good_signals, watch_signals]):
         print("✅ No immediate action required - continue monitoring")
 
+def analyze_multi_timeframe(conn, symbol, timeframes=['3m', '5m', '30m', '1h', '2h', '4h']):
+    """Analyze symbol across multiple timeframes"""
+    results = {}
+
+    for tf in timeframes:
+        df = get_price_data(conn, symbol, timeframe=tf, limit=100)
+        if df is None or len(df) < 50:
+            results[tf] = None
+            continue
+
+        # Calculate indicators
+        df['hull_21'] = calculate_hull_ma(df['close'], 21)
+
+        # Get latest values
+        latest = df.iloc[-1]
+        prev = df.iloc[-2] if len(df) > 1 else latest
+
+        # Hull signals
+        signal_type = None
+        if pd.notna(latest['hull_21']) and pd.notna(prev['hull_21']):
+            if latest['close'] > latest['hull_21'] and prev['close'] <= prev['hull_21']:
+                signal_type = 'BULLISH'
+            elif latest['close'] < latest['hull_21'] and prev['close'] >= prev['hull_21']:
+                signal_type = 'BEARISH'
+
+        # Current trend
+        trend = "BULLISH" if latest['close'] > latest['hull_21'] else "BEARISH"
+
+        results[tf] = {
+            'timeframe': tf,
+            'price': latest['close'],
+            'hull_21': latest['hull_21'],
+            'trend': trend,
+            'signal': signal_type
+        }
+
+    return results
+
+def print_multi_timeframe_overview(conn, symbols, timeframes=['3m', '5m', '30m', '1h', '2h', '4h']):
+    """Print multi-timeframe overview for all symbols"""
+    print("\n📊 MULTI-TIMEFRAME OVERVIEW")
+    print("="*80)
+
+    # Header
+    header = f"{'Symbol':<12}"
+    for tf in timeframes:
+        header += f"{tf:>8}"
+    print(header)
+    print("-"*80)
+
+    for symbol in symbols:
+        mtf_results = analyze_multi_timeframe(conn, symbol, timeframes)
+
+        # Symbol row
+        row = f"{symbol:<12}"
+        for tf in timeframes:
+            if mtf_results.get(tf):
+                if mtf_results[tf]['signal'] == 'BULLISH':
+                    row += "     🌪️ "
+                elif mtf_results[tf]['signal'] == 'BEARISH':
+                    row += "     🌊 "
+                elif mtf_results[tf]['trend'] == 'BULLISH':
+                    row += "     🟢 "
+                else:
+                    row += "     🔴 "
+            else:
+                row += "      - "
+        print(row)
+
+    print("\nLegend: 🌪️=Bullish Signal | 🌊=Bearish Signal | 🟢=Bullish Trend | 🔴=Bearish Trend")
+
+def print_timeframe_alignment(conn, symbols, timeframes=['3m', '5m', '30m', '1h', '2h', '4h']):
+    """Print symbols with multi-timeframe alignment"""
+    print("\n🎯 TIMEFRAME ALIGNMENT (Confluence Across TFs)")
+    print("="*80)
+
+    alignments = []
+
+    for symbol in symbols:
+        mtf_results = analyze_multi_timeframe(conn, symbol, timeframes)
+
+        bullish_count = sum(1 for tf in timeframes if mtf_results.get(tf) and mtf_results[tf]['trend'] == 'BULLISH')
+        bearish_count = sum(1 for tf in timeframes if mtf_results.get(tf) and mtf_results[tf]['trend'] == 'BEARISH')
+
+        if bullish_count >= 4:
+            alignments.append({
+                'symbol': symbol,
+                'direction': 'BULLISH',
+                'count': bullish_count,
+                'emoji': '🌪️'
+            })
+        elif bearish_count >= 4:
+            alignments.append({
+                'symbol': symbol,
+                'direction': 'BEARISH',
+                'count': bearish_count,
+                'emoji': '🌊'
+            })
+
+    if alignments:
+        for align in alignments:
+            print(f"{align['emoji']} {align['symbol']:<12} {align['direction']:<7} - {align['count']}/{len(timeframes)} timeframes aligned")
+    else:
+        print("⚠️  No strong multi-timeframe alignment detected")
+
 def main():
     """Main dashboard function"""
     current_time = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-    
+
+    # New timeframes for day trading
+    TIMEFRAMES = ['3m', '5m', '30m', '1h', '2h', '4h']
+
     print("🚀 WIND CATCHER & RIVER TURN TRADING SYSTEM")
     print("="*80)
-    print(f"📅 {current_time} | 1-Hour Timeframe Analysis")
+    print(f"📅 {current_time} | Multi-Timeframe Analysis")
+    print(f"⏱️  Timeframes: {', '.join(TIMEFRAMES)}")
     print("="*80)
-    
+
     # Connect to database
     conn = connect_to_database()
-    
+
     # Get watchlist
     cursor = conn.cursor()
-    cursor.execute("SELECT symbol FROM watchlist WHERE active = 1")
+    cursor.execute("SELECT DISTINCT symbol FROM watchlist WHERE active = 1")
     watchlist = [row[0] for row in cursor.fetchall()]
-    
-    print(f"📈 Analyzing {len(watchlist)} symbols: {', '.join(watchlist)}")
-    print("-"*80)
-    
-    # Analyze all symbols
-    results = []
+
+    # Normalize symbols
+    normalized_watchlist = []
     for symbol in watchlist:
+        if '/' in symbol:
+            normalized_watchlist.append(symbol.split('/')[0])
+        else:
+            normalized_watchlist.append(symbol)
+
+    print(f"📈 Analyzing {len(normalized_watchlist)} symbols: {', '.join(normalized_watchlist)}")
+    print("-"*80)
+
+    # Multi-timeframe overview
+    print_multi_timeframe_overview(conn, normalized_watchlist, TIMEFRAMES)
+
+    # Timeframe alignment
+    print_timeframe_alignment(conn, normalized_watchlist, TIMEFRAMES)
+
+    # Analyze 1h timeframe for detailed signals (compatibility with old dashboard)
+    results = []
+    for symbol in normalized_watchlist:
         result = analyze_complete_symbol(conn, symbol)
         results.append(result)
         time.sleep(0.1)  # Small delay
-    
-    # Print all sections
-    print_market_overview(results)
+
+    # Print detailed sections for 1h
+    print("\n" + "="*80)
+    print("📊 DETAILED 1H ANALYSIS")
+    print("="*80)
     print_active_signals(results)
     print_volume_alerts(results)
     print_confluence_summary(results)
     print_trading_recommendations(results)
-    
+
     # Footer
     print("\n" + "="*80)
     print("🎯 Analysis complete! System monitoring continues...")
-    print("💡 Tip: Run this dashboard each morning to check for new setups")
+    print("💡 Tip: Run this dashboard regularly to check for multi-timeframe setups")
+    print("💡 Collecting data every 1 minute - optimized for day trading")
     print("="*80)
-    
+
     conn.close()
 
 if __name__ == "__main__":

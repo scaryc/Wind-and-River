@@ -25,31 +25,58 @@
             <h2>🌪️ Wind Catcher</h2>
             <p class="panel-description">Bullish Signals</p>
 
-            <!-- 12h Timeframe -->
-            <div class="watchlist" data-timeframe="12h" data-direction="wind_catcher">
-                <h3>
-                    <span>12h Timeframe</span>
-                    <button class="add-btn" onclick="showAddSymbolModal('12h', 'wind_catcher')">+</button>
-                </h3>
-                <ul class="pair-list" id="wind-12h"></ul>
+            <!-- Row 1: Fast Timeframes (3m, 5m, 30m) -->
+            <div class="watchlist-row">
+                <div class="watchlist compact" data-timeframe="3m" data-direction="wind_catcher">
+                    <h3>
+                        <span>3m</span>
+                        <button class="add-btn" onclick="showAddSymbolModal('3m', 'wind_catcher')">+</button>
+                    </h3>
+                    <ul class="pair-list" id="wind-3m"></ul>
+                </div>
+
+                <div class="watchlist compact" data-timeframe="5m" data-direction="wind_catcher">
+                    <h3>
+                        <span>5m</span>
+                        <button class="add-btn" onclick="showAddSymbolModal('5m', 'wind_catcher')">+</button>
+                    </h3>
+                    <ul class="pair-list" id="wind-5m"></ul>
+                </div>
+
+                <div class="watchlist compact" data-timeframe="30m" data-direction="wind_catcher">
+                    <h3>
+                        <span>30m</span>
+                        <button class="add-btn" onclick="showAddSymbolModal('30m', 'wind_catcher')">+</button>
+                    </h3>
+                    <ul class="pair-list" id="wind-30m"></ul>
+                </div>
             </div>
 
-            <!-- 1h Timeframe -->
-            <div class="watchlist" data-timeframe="1h" data-direction="wind_catcher">
-                <h3>
-                    <span>1h Timeframe</span>
-                    <button class="add-btn" onclick="showAddSymbolModal('1h', 'wind_catcher')">+</button>
-                </h3>
-                <ul class="pair-list" id="wind-1h"></ul>
-            </div>
+            <!-- Row 2: Slow Timeframes (1h, 2h, 4h) -->
+            <div class="watchlist-row">
+                <div class="watchlist compact" data-timeframe="1h" data-direction="wind_catcher">
+                    <h3>
+                        <span>1h</span>
+                        <button class="add-btn" onclick="showAddSymbolModal('1h', 'wind_catcher')">+</button>
+                    </h3>
+                    <ul class="pair-list" id="wind-1h"></ul>
+                </div>
 
-            <!-- 15m Timeframe -->
-            <div class="watchlist" data-timeframe="15m" data-direction="wind_catcher">
-                <h3>
-                    <span>15m Timeframe</span>
-                    <button class="add-btn" onclick="showAddSymbolModal('15m', 'wind_catcher')">+</button>
-                </h3>
-                <ul class="pair-list" id="wind-15m"></ul>
+                <div class="watchlist compact" data-timeframe="2h" data-direction="wind_catcher">
+                    <h3>
+                        <span>2h</span>
+                        <button class="add-btn" onclick="showAddSymbolModal('2h', 'wind_catcher')">+</button>
+                    </h3>
+                    <ul class="pair-list" id="wind-2h"></ul>
+                </div>
+
+                <div class="watchlist compact" data-timeframe="4h" data-direction="wind_catcher">
+                    <h3>
+                        <span>4h</span>
+                        <button class="add-btn" onclick="showAddSymbolModal('4h', 'wind_catcher')">+</button>
+                    </h3>
+                    <ul class="pair-list" id="wind-4h"></ul>
+                </div>
             </div>
         </aside>
 
@@ -81,31 +108,58 @@
             <h2>🌊 River Turn</h2>
             <p class="panel-description">Bearish Signals</p>
 
-            <!-- 12h Timeframe -->
-            <div class="watchlist" data-timeframe="12h" data-direction="river_turn">
-                <h3>
-                    <span>12h Timeframe</span>
-                    <button class="add-btn" onclick="showAddSymbolModal('12h', 'river_turn')">+</button>
-                </h3>
-                <ul class="pair-list" id="river-12h"></ul>
+            <!-- Row 1: Fast Timeframes (3m, 5m, 30m) -->
+            <div class="watchlist-row">
+                <div class="watchlist compact" data-timeframe="3m" data-direction="river_turn">
+                    <h3>
+                        <span>3m</span>
+                        <button class="add-btn" onclick="showAddSymbolModal('3m', 'river_turn')">+</button>
+                    </h3>
+                    <ul class="pair-list" id="river-3m"></ul>
+                </div>
+
+                <div class="watchlist compact" data-timeframe="5m" data-direction="river_turn">
+                    <h3>
+                        <span>5m</span>
+                        <button class="add-btn" onclick="showAddSymbolModal('5m', 'river_turn')">+</button>
+                    </h3>
+                    <ul class="pair-list" id="river-5m"></ul>
+                </div>
+
+                <div class="watchlist compact" data-timeframe="30m" data-direction="river_turn">
+                    <h3>
+                        <span>30m</span>
+                        <button class="add-btn" onclick="showAddSymbolModal('30m', 'river_turn')">+</button>
+                    </h3>
+                    <ul class="pair-list" id="river-30m"></ul>
+                </div>
             </div>
 
-            <!-- 1h Timeframe -->
-            <div class="watchlist" data-timeframe="1h" data-direction="river_turn">
-                <h3>
-                    <span>1h Timeframe</span>
-                    <button class="add-btn" onclick="showAddSymbolModal('1h', 'river_turn')">+</button>
-                </h3>
-                <ul class="pair-list" id="river-1h"></ul>
-            </div>
+            <!-- Row 2: Slow Timeframes (1h, 2h, 4h) -->
+            <div class="watchlist-row">
+                <div class="watchlist compact" data-timeframe="1h" data-direction="river_turn">
+                    <h3>
+                        <span>1h</span>
+                        <button class="add-btn" onclick="showAddSymbolModal('1h', 'river_turn')">+</button>
+                    </h3>
+                    <ul class="pair-list" id="river-1h"></ul>
+                </div>
 
-            <!-- 15m Timeframe -->
-            <div class="watchlist" data-timeframe="15m" data-direction="river_turn">
-                <h3>
-                    <span>15m Timeframe</span>
-                    <button class="add-btn" onclick="showAddSymbolModal('15m', 'river_turn')">+</button>
-                </h3>
-                <ul class="pair-list" id="river-15m"></ul>
+                <div class="watchlist compact" data-timeframe="2h" data-direction="river_turn">
+                    <h3>
+                        <span>2h</span>
+                        <button class="add-btn" onclick="showAddSymbolModal('2h', 'river_turn')">+</button>
+                    </h3>
+                    <ul class="pair-list" id="river-2h"></ul>
+                </div>
+
+                <div class="watchlist compact" data-timeframe="4h" data-direction="river_turn">
+                    <h3>
+                        <span>4h</span>
+                        <button class="add-btn" onclick="showAddSymbolModal('4h', 'river_turn')">+</button>
+                    </h3>
+                    <ul class="pair-list" id="river-4h"></ul>
+                </div>
             </div>
         </aside>
     </div>

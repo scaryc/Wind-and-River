@@ -133,7 +133,7 @@ body {
 .watchlist-panel {
     background-color: var(--bg-tertiary);
     border-radius: 12px;
-    padding: 1.5rem;
+    padding: 0.8rem;
     overflow-y: auto;
     box-shadow: var(--shadow-lg);
 }
@@ -147,17 +147,25 @@ body {
 }
 
 .watchlist-panel h2 {
-    font-size: 1.25rem;
-    margin-bottom: 0.5rem;
+    font-size: 0.95rem;
+    margin-bottom: 0.3rem;
     text-align: center;
 }
 
 .panel-description {
     text-align: center;
-    font-size: 0.875rem;
+    font-size: 0.65rem;
     color: var(--text-secondary);
-    margin-bottom: 1.5rem;
+    margin-bottom: 0.6rem;
     font-style: italic;
+}
+
+/* Watchlist Row - 3 columns layout */
+.watchlist-row {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.4rem;
+    margin-bottom: 0.5rem;
 }
 
 /* Individual Watchlist Box */
@@ -168,6 +176,13 @@ body {
     margin-bottom: 1rem;
     border: 1px solid var(--border);
     transition: all var(--transition-normal);
+}
+
+/* Compact watchlist (66% smaller for multi-timeframe) */
+.watchlist.compact {
+    padding: 0.35rem;
+    margin-bottom: 0;
+    border-radius: 4px;
 }
 
 .watchlist:hover {
@@ -187,6 +202,12 @@ body {
     font-weight: 600;
 }
 
+.watchlist.compact h3 {
+    font-size: 0.625rem;
+    margin-bottom: 0.25rem;
+    letter-spacing: 0.02em;
+}
+
 .add-btn {
     background-color: var(--accent-success);
     color: white;
@@ -198,6 +219,12 @@ body {
     font-weight: bold;
     transition: all var(--transition-fast);
     box-shadow: var(--shadow-sm);
+}
+
+.watchlist.compact .add-btn {
+    padding: 0.1rem 0.3rem;
+    font-size: 0.75rem;
+    border-radius: 3px;
 }
 
 .add-btn:hover {
@@ -218,6 +245,12 @@ body {
     transition: background-color var(--transition-normal);
 }
 
+.watchlist.compact .pair-list {
+    min-height: 20px;
+    padding: 0.2rem;
+    border-radius: 3px;
+}
+
 .pair-list.drag-over {
     background-color: var(--bg-hover);
     border: 2px dashed var(--accent-info);
@@ -234,6 +267,12 @@ body {
     cursor: move;
     transition: all var(--transition-normal);
     border: 1px solid transparent;
+}
+
+.watchlist.compact .pair-item {
+    padding: 0.25rem 0.4rem;
+    margin-bottom: 0.2rem;
+    border-radius: 3px;
 }
 
 .pair-item:hover {
@@ -254,6 +293,11 @@ body {
     color: var(--text-primary);
 }
 
+.watchlist.compact .pair-name {
+    font-size: 0.7rem;
+    font-weight: 500;
+}
+
 .remove-btn {
     color: var(--accent-river);
     cursor: pointer;
@@ -262,6 +306,12 @@ body {
     padding: 0.25rem 0.5rem;
     border-radius: 4px;
     transition: all var(--transition-fast);
+}
+
+.watchlist.compact .remove-btn {
+    font-size: 0.75rem;
+    padding: 0.1rem 0.25rem;
+    border-radius: 2px;
 }
 
 .remove-btn:hover {

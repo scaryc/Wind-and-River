@@ -160,6 +160,14 @@ body {
     font-style: italic;
 }
 
+/* Watchlist Row - 3 columns layout */
+.watchlist-row {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.4rem;
+    margin-bottom: 0.5rem;
+}
+
 /* Individual Watchlist Box */
 .watchlist {
     background-color: var(--bg-secondary);
@@ -173,7 +181,7 @@ body {
 /* Compact watchlist (66% smaller for multi-timeframe) */
 .watchlist.compact {
     padding: 0.35rem;
-    margin-bottom: 0.4rem;
+    margin-bottom: 0;
     border-radius: 4px;
 }
 
